@@ -1,0 +1,37 @@
+/* RESET CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* GLOBAL BODY STYLE */
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* REMOVE DEFAULT LINK STYLE */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* DEFAULT BUTTON */
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* DEFAULT INPUT */
+input {
+  font-family: inherit;
+  outline: none;
+}
+
+/* REMOVE LIST BULLET */
+ul {
+  list-style: none;
+}
