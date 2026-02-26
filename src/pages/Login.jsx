@@ -1,55 +1,78 @@
-import { useState, useContext } from "react";
-import { AuthContext } from "../context/auth.context";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/auth.context";
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const [email, setEmail]       = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError]       = useState("");
+  const [loading, setLoading]   = useState(false);
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: ""
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const { login } = useAuth();
+  const navigate  = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
     try {
-      await login(formData);
+      await login(email, password);
       navigate("/");
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      setError(err.message || "Invalid email or password.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <form onSubmit={handleSubmit} className="p-6 border rounded w-96">
-        <h2 className="text-xl font-bold mb-4">Login</h2>
+    <div className="auth-page">
+      <div className="auth-card animate-fade-up">
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="border p-2 w-full mb-3"
-          onChange={handleChange}
-        />
+        <span className="auth-logo">💸 ExpenseTracker</span>
+        <h1 className="auth-title">Welcome back</h1>
+        <p className="auth-subtitle">Sign in to your account to continue</p>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="border p-2 w-full mb-3"
-          onChange={handleChange}
-        />
+        {error && (
+          <div className="alert alert-error">{error}</div>
+        )}
 
-        <button className="bg-green-600 text-white w-full p-2">
-          Login
-        </button>
-      </form>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input
+              className="form-input"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Password</label>
+            <input
+              className="form-input"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button className="btn-primary" type="submit" disabled={loading}>
+            {loading ? <span className="loader-inline" /> : "Sign In"}
+          </button>
+        </form>
+
+        <div className="auth-switch">
+          Don't have an account?{" "}
+          <Link to="/signup">Create one</Link>
+        </div>
+
+      </div>
     </div>
   );
 };

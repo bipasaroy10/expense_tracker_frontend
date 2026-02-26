@@ -1,38 +1,37 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../context/auth.context";
+import { useAuth } from "../context/auth.context";
 
 const Navbar = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await logout();
+  const handleLogout = () => {
+    logout();
     navigate("/login");
   };
 
   return (
-    <nav className="flex justify-between items-center p-4 bg-gray-900 text-white">
-      <h1 className="text-xl font-bold">Expense Tracker</h1>
+    <nav className="navbar">
+      <Link to="/" className="navbar-brand">
+        💸 ExpenseTracker
+      </Link>
 
-      {user && (
-        <div className="flex gap-4 items-center">
-          <Link to="/" className="hover:underline">
-            Dashboard
-          </Link>
-
-          <Link to="/add" className="hover:underline">
-            Add Expense
-          </Link>
-
-          <button
-            onClick={handleLogout}
-            className="bg-red-600 px-3 py-1 rounded"
-          >
-            Logout
-          </button>
-        </div>
-      )}
+      <div className="navbar-links">
+        {user ? (
+          <>
+            <Link to="/" className="nav-link">Dashboard</Link>
+            <Link to="/add" className="nav-link">Add Expense</Link>
+            <button className="nav-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="nav-link">Login</Link>
+            <Link to="/signup" className="nav-btn">Sign Up</Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 };

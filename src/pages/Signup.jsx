@@ -1,63 +1,92 @@
 import { useState } from "react";
-import { signup } from "../api/auth.api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/auth.context";
 
 const Signup = () => {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: ""
-  });
+  const [name, setName]         = useState("");
+  const [email, setEmail]       = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError]       = useState("");
+  const [loading, setLoading]   = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const { signup } = useAuth();
+  const navigate   = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
     try {
-      signup(formData);
-      alert("Signup successful");
-      navigate("/login");
+      await signup(name, email, password);
+      navigate("/");
     } catch (err) {
-      alert(err.response?.data?.message || "Signup failed");
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <form onSubmit={handleSubmit} className="p-6 border rounded w-96">
-        <h2 className="text-xl font-bold mb-4">Signup</h2>
+    <div className="auth-page">
+      <div className="auth-card animate-fade-up">
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          className="border p-2 w-full mb-3"
-          onChange={handleChange}
-        />
+        <span className="auth-logo">💸 ExpenseTracker</span>
+        <h1 className="auth-title">Create account</h1>
+        <p className="auth-subtitle">Start tracking your expenses today</p>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="border p-2 w-full mb-3"
-          onChange={handleChange}
-        />
+        {error && (
+          <div className="alert alert-error">{error}</div>
+        )}
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="border p-2 w-full mb-3"
-          onChange={handleChange}
-        />
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Full Name</label>
+            <input
+              className="form-input"
+              type="text"
+              placeholder="John Doe"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
-        <button className="bg-blue-600 text-white w-full p-2">
-          signup
-        </button>
-      </form>
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input
+              className="form-input"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Password</label>
+            <input
+              className="form-input"
+              type="password"
+              placeholder="Min. 6 characters"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+            />
+          </div>
+
+          <button className="btn-primary" type="submit" disabled={loading}>
+            {loading ? <span className="loader-inline" /> : "Create Account"}
+          </button>
+        </form>
+
+        <div className="auth-switch">
+          Already have an account?{" "}
+          <Link to="/login">Sign in</Link>
+        </div>
+
+      </div>
     </div>
   );
 };

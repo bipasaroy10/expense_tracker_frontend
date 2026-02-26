@@ -1,7 +1,8 @@
-const Loader = () => {
+const Loader = ({ text = "Loading..." }) => {
   return (
-    <div className="flex justify-center items-center h-40">
-      <p className="text-lg font-semibold">Loading...</p>
+    <div className="loader-overlay">
+      <div className="loader-spinner" />
+      <span className="loader-text">{text}</span>
     </div>
   );
 };

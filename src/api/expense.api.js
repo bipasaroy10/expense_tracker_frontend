@@ -1,10 +1,13 @@
 import api from "./axios.api";
 
-export const createExpense = (data) =>
+export const addExpense = (data) =>
   api.post("/expenses/create", data);
 
 export const getExpenses = () =>
   api.get("/expenses/get");
+
+export const getExpenseById = (id) =>
+  api.get(`/expenses/get/${id}`);
 
 export const updateExpense = (id, data) =>
   api.put(`/expenses/update/${id}`, data);
