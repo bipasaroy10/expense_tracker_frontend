@@ -4,13 +4,16 @@ import { addExpense } from "../api/expense.api";
 
 const CATEGORIES = [
   "Food",
-  "Travel",
-  "Shopping",
-  "Entertainment",
-  "Health",
-  "Education",
-  "Bills",
-  "Other",
+            "Transport",
+            "Utilities",
+            "Entertainment",
+            "Healthcare",
+            "Rent",
+            "Shopping",
+            "ElectricBill",
+            "GasBill",
+            "WaterBill",
+            "Other"
 ];
 
 const AddExpense = () => {
