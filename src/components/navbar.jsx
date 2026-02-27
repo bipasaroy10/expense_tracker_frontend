@@ -1,14 +1,17 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const navigate         = useNavigate();
+  const location         = useLocation();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate("/login");
   };
+
+  const isActive = (path) => location.pathname === path ? "nav-link active" : "nav-link";
 
   return (
     <nav className="navbar">
@@ -19,15 +22,14 @@ const Navbar = () => {
       <div className="navbar-links">
         {user ? (
           <>
-            <Link to="/" className="nav-link">Dashboard</Link>
-            <Link to="/add" className="nav-link">Add Expense</Link>
-            <button className="nav-btn" onClick={handleLogout}>
-              Logout
-            </button>
+            <Link to="/"        className={isActive("/")}>Dashboard</Link>
+            <Link to="/add"     className={isActive("/add")}>Add Expense</Link>
+            <Link to="/profile" className={isActive("/profile")}>Profile</Link>
+            <button className="nav-btn" onClick={handleLogout}>Logout</button>
           </>
         ) : (
           <>
-            <Link to="/login" className="nav-link">Login</Link>
+            <Link to="/login"  className="nav-link">Login</Link>
             <Link to="/signup" className="nav-btn">Sign Up</Link>
           </>
         )}

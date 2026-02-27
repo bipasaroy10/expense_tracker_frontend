@@ -14,3 +14,9 @@ export const forgetPassword = (data) =>
 
 export const resetPassword = (data) =>
   api.post("/users/resetPassword", data);
+
+export const getUserProfile = () =>
+  api.get("/users/getProfile");
+
+export const updateUserProfile = (data) =>
+  api.put("/users/updateProfile", data);
